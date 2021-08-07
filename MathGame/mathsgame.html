@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Css Folder/style.css">
+    <title>Document</title>
+
+</head>
+<body>
+    <div class="container">
+        <div class="overall">
+            <div class="interior">
+                <div class="bottle">
+                    <div class="score-container">
+                        <span>Score</span>: <span id="score">0</span>
+    
+                    </div>
+                </div>
+                <div class="exterior">
+                    <div class="correct-style">
+                        <button id="correct">Correct</button>
+                    </div>
+                    <div id="popup">
+                        <p>GameOver!</p>
+                        <span>Score</span>: <span id="value"><br>0</span>
+
+                    </div>
+                    <div class="large-box"><span id="firstnumber"></span> <span id="symbol">x</span> <span id="secondnumber"></span></div>
+                    <div class="click-input">Click on the correct answer</div>
+
+                    <div class="box-storage">
+                        <div class="box" id="box-1"></div>
+                        <div class="box" id="box-2"></div>
+                        <div class="box" id="box-3"></div>
+                        <div class="box" id="box-4"></div>
+                    </div>
+                </div>  
+               
+                <div class="btn-container">
+                   
+                        <div id="btn">Start Game</div>
+
+                        <div class="timer-container">
+                            <button class="timer" id="set-time">Time remaining : <span id="timer">60</span></button>
+                        </div>
+
+                </div>
+                
+            </div>
+            
+            
+        </div>
+    </div>
+
+    <script>
+    // <!-- Generate question -->
+    // <!-- Change text on button to reset game -->
+    // <!-- Start  -->
+    // Generatr answer
+    // Generate other options
+    // score++ when answer is correct
+    // on clicking thr reset button the game should restart
+    // score-- when answer is wrong
+    // when time = 0 game over and score should be displayed
+    // right answer should be shown on random boxes
+    // Once it is Game Over users should not be able to play game
+
+
+    // Global Variables
+    var time = 60
+    var timer = null
+    var options = []
+    var position = []
+    var boxes = ["box-1","box-2","box-3","box-4"]
+    var correctAnswer = 0
+    var score = 0
+    var playing = false
+    
+    // Hide the timer div
+
+    document.getElementById("set-time").style.display ="none"
+    document.getElementById("popup").style.display ="none"
+    document.getElementById("symbol").style.display ="none"
+    document.getElementById("correct").style.display = "none"
+
+
+    document.getElementById('btn').onclick=function(){
+        if(this.innerHTML== "Start Game"){
+            this.innerHTML="Reset Game"
+            this.style.backgroundColor = "purple"
+            generateQuestion()
+            startTimer()
+            document.getElementById("symbol").style.display ="inline-block"
+            document.getElementById("set-time").style.display= "block"
+            showOption()
+            playing = true
+
+            for(var i = 0; i<boxes.length; i++){
+                 document.getElementById(boxes[i]).onclick = function(){ 
+                    if(this.innerText==correctAnswer){
+                        score++             
+                        document.getElementById("score").innerText = score
+                        options = []
+                        position = []
+                        generateQuestion();
+                        showOption()
+                        showForFewSeconds("correct", "correct", "green");
+                        showIfCorrect();
+                    
+                    }
+                    else{
+                        while(!score<0)
+                        score--
+                        document.getElementById("score").innerText = score
+                        // document.getElementById("correct").style.display = "block"
+                        // document.getElementById("correct").innerText = "wrong"
+                        // document.getElementById("correct").style.backgroundColor = "red"
+                        showForFewSeconds("correct", "wrong", "red");
+                        
+                        
+                    }
+            
+        }
+
+    }
+        }
+
+
+        else{
+           window.location.reload()
+
+        }
+
+    }
+    
+
+    function showIfCorrect(){
+        document.getElementById(boxes[i]).style.backgroundColor = "green"
+        setTimeout( function(){
+        document.getElementById(boxes[i]).style.backgroundColor = "none"
+
+        }, 1000 )
+    }
+
+    function showForFewSeconds(id,text,bg){
+        document.getElementById(id).style.display = "block"
+        document.getElementById(id).style.backgroundColor = bg
+        document.getElementById(id).innerText = text
+        setTimeout( function() {
+            document.getElementById(id).style.display = "none"
+        }, 1000);
+    }
+
+
+      
+
+    // Function to generate question
+
+    
+    function generateQuestion(){
+        var firstnumber = (Math.round(Math.random() *9)+1)
+        document.getElementById("firstnumber").innerHTML = firstnumber
+
+        var secondnumber = (Math.round(Math.random() *9)+1)
+        document.getElementById("secondnumber").innerHTML = secondnumber
+
+
+        generateAnswer(firstnumber,secondnumber)
+
+        
+
+    }   
+
+    // Function to genertate the correct answer
+    function generateAnswer(a,b){
+        var answer = a*b
+        correctAnswer = answer
+
+        //add it to option array
+        options.push(answer)
+        // document.getElementById("box-1").innerHTML = answer
+        
+
+    }
+
+        
+
+    function startTimer (){
+       timer = setInterval( function()  {
+            time--
+            
+            document.getElementById("timer").innerHTML = time
+
+            if(time == 0){
+                clearInterval(timer)
+                document.getElementById("popup").style.display ="block"
+                document.getElementById("value").innerText = score
+                playing = flase
+                
+            }
+        }, 1000);
+    }
+
+    function generateOptions(){
+        // var ran1 = Math.round(Math.random() *99)+1
+        // var ran2 = Math.round(Math.random() *99)+1
+        // var ran3 = Math.round(Math.random() *99)+1
+
+        // document.getElementById("box-2").innerHTML = ran1
+        // document.getElementById("box-3").innerHTML = ran2
+        // document.getElementById("box-4").innerHTML = ran3
+        console.log(options)
+        while(options.length<4){
+            var ran = Math.round(Math.random() *99)+1
+            if(!options.includes(ran)){
+                options.push(ran);
+                if(options.length==4){
+                   break
+                }
+            }
+
+            
+        }
+
+        console.log(options)
+
+    }
+
+    function randomPosition(){
+        while(position.length<4){
+            var ran = Math.round(Math.random() *3)
+            if(!position.includes(ran)){
+                position.push(ran)
+                if(position.length==4){
+                break
+            }
+            }
+
+           
+        }
+    }
+
+    function showOption(){
+        generateOptions()
+        randomPosition()
+        document.getElementById(boxes[position[0]]).innerHTML=options[0]
+        document.getElementById(boxes[position[1]]).innerHTML=options[1]
+        document.getElementById(boxes[position[2]]).innerHTML=options[2]
+        document.getElementById(boxes[position[3]]).innerHTML=options[3]
+    }
+
+    </script>
+
+    
+   
+</body>
+</html>
