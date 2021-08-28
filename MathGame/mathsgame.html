@@ -105,13 +105,13 @@
                         options = []
                         position = []
                         generateQuestion();
-                        showOption()
-                        showForFewSeconds("correct", "correct", "green");
+                        showOption();
+                        showForFewSeconds("correct", "correct", "green"); 
                         showIfCorrect();
                     
                     }
                     else{
-                        // while(!score<0)
+                        while(!score<0)
                         score--
                         document.getElementById("score").innerText = score
                         // document.getElementById("correct").style.display = "block"
